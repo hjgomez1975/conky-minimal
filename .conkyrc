@@ -1,0 +1,186 @@
+--[[
+#=====================================================================================
+#                    
+# Date    : 08/04/2021
+# Author  : Hector Gomez at http://innovaskynet.blogspot.com/
+# Version : v1.0
+# License : Distributed under the terms of GNU GPL version 2 or later
+#======================================================================================
+
+#======================================================================================
+#                               
+# Source : conky version 1.10.8  
+#
+#======================================================================================
+
+
+]]
+
+conky.config = {
+
+	--Various settings
+
+	background = true, 							-- forked to background
+	cpu_avg_samples = 2,
+	diskio_avg_samples = 10,
+	double_buffer = true,
+	if_up_strictness = 'address',
+	net_avg_samples = 2,
+	no_buffers = true,
+	temperature_unit = 'celsius',
+	text_buffer_size = 2048,
+	update_interval = 2,
+	imlib_cache_size = 0,                       --spotify cover
+
+	--Placement
+
+	alignment = 'top_right',
+	gap_x = 10,
+	gap_y = 20,
+	minimum_height = 1100,
+	minimum_width = 280,
+	maximum_width = 280,
+
+	--Graphical
+
+	border_inner_margin = 10, 					-- margin between border and text
+	border_outer_margin = 1, 					-- margin between border and edge of window
+	border_width = 0, 							-- border width in pixels
+	default_bar_width = 280,
+	default_bar_height = 10,
+	default_gauge_height = 25,
+	default_gauge_width =40,
+	default_graph_height = 40,
+	default_graph_width = 153,
+	default_shade_color = '#000000',
+	default_outline_color = '#000000',
+	draw_borders = false,						--draw borders around text
+	draw_graph_borders = true,
+	draw_shades = false,
+	draw_outline = false,
+	stippled_borders = 0,
+
+	--Textual
+	
+	extra_newline = false,
+	format_human_readable = true,
+    font = 'Montserrat Regular:size=10',
+	max_text_width = 0,
+	max_user_text = 16384,
+	override_utf8_locale = true,
+	short_units = true,
+	top_name_width = 21,
+	top_name_verbose = false,
+	uppercase = false,
+	use_spacer = 'none',
+	use_xft = true,
+	xftalpha = 1,
+
+	--Windows
+
+	own_window = true,
+	own_window_argb_value = 150,
+	own_window_argb_visual = true,
+	own_window_class = 'Conky',
+	own_window_colour = '#000000',
+	own_window_hints = 'undecorated,below,sticky,skip_taskbar,skip_pager',
+	own_window_transparent = no,
+	own_window_title = 'system_conky',
+	own_window_type = 'normal',-- # options are: normal/override/dock/desktop/panel
+	
+
+	--Colours
+
+	default_color = '#FFFFFF',  				-- default color and border color
+	color1 = '#688BC4', --blue (title)
+	color2 = '#AAAAAA', --whiter gray
+	color3 = '#888888', --dark grey
+	color4 = '#EF5A29', --orange (high process/mem)
+	color5 = '#77B753', --green (subtitle)
+	color6 = '#CCCCCC', --graph borders
+	color7 = '#CE0000', --red (values)
+
+
+};
+
+conky.text = [[
+#
+#
+# SISTEMA
+${goto 5}${font zekton:style=Bold:pixelsize=14}${color2}Sistema ${color1}${hr}${color}
+${font Montserrat Light:size=10}${color1}  SO: ${font}${color7}${alignr} ${execi 10800 cat /etc/issue.net} ${machine}
+${font Montserrat Light:size=10}${color1}  Kernel: ${font}${color7}${alignr} ${kernel}
+${font Montserrat Light:size=10}${color1}  Equipo: ${font}${color7}${alignr} ${nodename}
+${font Montserrat Light:size=10}${color1}  Actividad: ${font}${color7}${alignr} ${uptime_short}
+${color1}${font Montserrat Light:size=10}  Bateria: ${font}${color7}${alignr} ${battery_percent BAT1}% ${color6}${battery_bar 10,90 BAT1}${color} 
+
+#
+#
+# HARDWARE
+${voffset -5}
+${goto 5}${font zekton:style=Bold:pixelsize=14}${color2}Hardware ${color1}${hr}${color}
+#
+#
+# CPU
+${color1}${font Montserrat Light:size=10}${execi 3600 grep model /proc/cpuinfo | cut -d : -f2 | tail -1 | sed 's/\s//'} 
+${color1}${font Montserrat Light:size=10}Package: ${font}${color7}${freq_g} GHz ${execi 5 sensors|grep 'Package id 0'| awk -F'+' '{print $2}' | awk -F'.' '{print $1}'} °C
+${color1}${hr}${color} 
+${color1}${goto 10}Core 0: ${color7}${execi 5 sensors|grep 'Core 0'| awk -F'+' '{print $2}' | awk -F'.' '{print $1}'} °C ${goto 100} | ${color1}CPU01: ${color7}${goto 170}${cpu cpu1}%${color6}${goto 200}${cpubar cpu1 10,40}${color7}${goto 250}${freq_g 1}GHz
+${goto 100} | ${color1}CPU02: ${color7}${goto 170}${cpu cpu2}%${color6}${goto 200}${cpubar cpu2 10,40}${color7}${goto 250}${freq_g 2}GHz
+${color1}${goto 10}Core 1: ${color7}${execi 5 sensors|grep 'Core 1'| awk -F'+' '{print $2}' | awk -F'.' '{print $1}'} °C ${goto 100} | ${color1}CPU03: ${color7}${goto 170}${cpu cpu3}%${color6}${goto 200}${cpubar cpu3 10,40}${color7}${goto 250}${freq_g 3}GHz
+${goto 100} | ${color1}CPU04: ${color7}${goto 170}${cpu cpu4}%${color6}${goto 200}${cpubar cpu4 10,40}${color7}${goto 250}${freq_g 4}GHz
+${color1}${goto 10}Core 2: ${color7}${execi 5 sensors|grep 'Core 2'| awk -F'+' '{print $2}' | awk -F'.' '{print $1}'} °C ${goto 100} | ${color1}CPU05: ${color7}${goto 170}${cpu cpu5}%${color6}${goto 200}${cpubar cpu5 10,40}${color7}${goto 250}${freq_g 5}GHz
+${goto 100} | ${color1}CPU06: ${color7}${goto 170}${cpu cpu6}%${color6}${goto 200}${cpubar cpu6 10,40}${color7}${goto 250}${freq_g 6}GHz
+${color1}${goto 10}Core 3: ${color7}${execi 5 sensors|grep 'Core 3'| awk -F'+' '{print $2}' | awk -F'.' '{print $1}'} °C ${goto 100} | ${color1}CPU07: ${color7}${goto 170}${cpu cpu7}%${color6}${goto 200}${cpubar cpu7 10,40}${color7}${goto 250}${freq_g 7}GHz 
+${goto 100} | ${color1}CPU08: ${color7}${goto 170}${cpu cpu8}%${color6}${goto 200}${cpubar cpu8 10,40}${color7}${goto 250}${freq_g 8}GHz
+${color1}${goto 10}Core 4: ${color7}${execi 5 sensors|grep 'Core 4'| awk -F'+' '{print $2}' | awk -F'.' '{print $1}'} °C ${goto 100} | ${color1}CPU09: ${color7}${goto 170}${cpu cpu9}%${color6}${goto 200}${cpubar cpu9 10,40}${color7}${goto 250}${freq_g 9}GHz 
+${goto 100} | ${color1}CPU10: ${color7}${goto 170}${cpu cpu10}%${color6}${goto 200}${cpubar cpu10 10,40}${color7}${goto 250}${freq_g 10}GHz
+${color1}${goto 10}Core 5: ${color7}${execi 5 sensors|grep 'Core 5'| awk -F'+' '{print $2}' | awk -F'.' '{print $1}'} °C ${goto 100} | ${color1}CPU11: ${color7}${goto 170}${cpu cpu11}%${color6}${goto 200}${cpubar cpu11 10,40}${color7}${goto 250}${freq_g 11}GHz 
+${goto 100} | ${color1}CPU12: ${color7}${goto 170}${cpu cpu12}%${color6}${goto 200}${cpubar cpu12 10,40}${color7}${goto 250}${freq_g 12}GHz
+${color}
+#
+#
+# RAM
+${font FontAwesome}${font}${voffset -2}${color1}${font Montserrat Light:size=10}${goto 30}RAM: ${color7}$mem / $memmax ($memperc%) | Swap :${swapperc}%
+${color6}${membar}
+#
+#
+# Procesos TOP
+${voffset -5}
+${goto 5}${font zekton:style=Bold:pixelsize=14}${color2}Recursos TOP ${color1}${hr}${color}
+${color1}${font Montserrat Light:size=10}${goto 10}Aplicación ${goto 200}  CPU ${goto 250}  MEM ${font}${color}
+${color4}${goto 10}${top name 1}${goto 200}${top cpu 1}${goto 250}${top mem 1}
+${color7}${goto 10}${top name 2}${goto 200}${top cpu 2}${goto 250}${top mem 2}
+${color7}${goto 10}${top name 3}${goto 200}${top cpu 3}${goto 250}${top mem 3}
+${color7}${goto 10}${top name 4}${goto 200}${top cpu 4}${goto 250}${top mem 4}
+${color7}${goto 10}${top name 5}${goto 200}${top cpu 5}${goto 250}${top mem 5}
+
+${color1}${font Montserrat Light:size=10}${goto 10}Procesos: ${color7}${processes} ${color4}($running_processes corriendo)${font}${color}
+#
+#
+# Almacenamiento
+${voffset -5}
+${goto 5}${font zekton:style=Bold:pixelsize=14}${color2}Almacenamiento ${font Snap.se:size=8} ${color1}${hr}${color}
+${goto 10}${voffset 4}${font FontAwesome}${color1}${font Montserrat Light:size=10} Root: ${color7}${alignr}${fs_free /} / ${fs_size /}${color}
+${goto 5}${voffset 4}${color6}${fs_bar /}${color}
+
+#
+#
+# Conexiones
+${goto 5}${font zekton:style=Bold:pixelsize=14}${color2}Conexión ${font  Snap.se:size=8} ${color1}${hr}${color}
+${goto 10}${voffset 4}${font FontAwesome}${color1}${font Montserrat Light:size=10} Public IPv4: ${color7}${alignr}${execi 3600 wget -O - -q ipv4.icanhazip.com}${color}
+## ${goto 10}${voffset 4}${font FontAwesome}${color1}${font Montserrat Light:size=10} Public IPv6: ${color7}${alignr}${execi 3600 wget -O - -q ipv6.icanhazip.com}${color}
+${font FontAwesome}${color1}${font Montserrat Light:size=10} IPv4: ${color7}${alignr}${addr wlo1}${color}
+
+#
+#
+# Wireless
+${goto 5}${font zekton:style=Bold:pixelsize=14}${color2}Red Inalámbrica${font  Snap.se:size=8} ${color1}${hr}${color}
+${goto 10}${voffset 4}${font FontAwesome}${color1}${font Montserrat Light:size=10}WLAN INFO - Channel: ${color7}${wireless_channel wlo1}${color1} - Freq: ${color7}${wireless_freq wlo1}${color}
+${goto 10}${voffset 4}${font FontAwesome}${color1}${font Montserrat Light:size=10} SSID: ${color7}${alignr}${wireless_essid wlo1}${color}
+${goto 10}${voffset 4}${font FontAwesome}${color1}${font Montserrat Light:size=10} Señal: ${color7}${alignr}${wireless_link_qual wlo1}%${color}
+${goto 10}${voffset 4}${font FontAwesome}${color1}${font Montserrat Light:size=10} Descarga: ${color7}${downspeed wlo1}/s ${alignr} ${color}${font FontAwesome}${color1}${font Montserrat Light:size=10} Subida: ${color7}${upspeed wlo1}/s${color}
+${goto 10}${voffset 4}${color6}${downspeedgraph wlo1 20,107} ${alignr}${upspeedgraph wlo1 20,107}
+${color1}Total ${color7}${totaldown wlo1} ${alignr}${color1}Total ${color7}${totalup wlo1}${color}
+
+]];
